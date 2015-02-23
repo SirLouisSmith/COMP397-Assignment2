@@ -1,46 +1,6 @@
-﻿// CreateJS Boilerplate for COMP397
-//BUTTON CLASS
-var Button = (function () {
-    function Button(path, x, y) {
-        this._x = x;
-        this._y = y;
-        this._image = new createjs.Bitmap(path);
-        this._image.x = this._x;
-        this._image.y = this._y;
-
-        this._image.addEventListener("mouseover", this._buttonOver);
-        this._image.addEventListener("mouseout", this._buttonOut);
-    }
-    Button.prototype.setX = function (x) {
-        this._x = x;
-    };
-
-    Button.prototype.getX = function () {
-        return this._x;
-    };
-
-    Button.prototype.setY = function (y) {
-        this._y = y;
-    };
-
-    Button.prototype.getY = function () {
-        return this._y;
-    };
-
-    Button.prototype.getImage = function () {
-        return this._image;
-    };
-
-    Button.prototype._buttonOut = function (event) {
-        event.currentTarget.alpha = 1; // 100% Alpha
-    };
-
-    Button.prototype._buttonOver = function (event) {
-        event.currentTarget.alpha = 0.7;
-    };
-    return Button;
-})();
-
+﻿/// <reference path="objects/button.ts" />
+/// <reference path="constants/constants.ts" />
+// Author: Louis Smith
 // VARIABLES ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 var canvas;
 var stage;
@@ -53,8 +13,6 @@ var winnings = 0;
 var jackpot = 5000;
 var turn = 0;
 var playerBet = 0;
-var winNumber = 0;
-var lossNumber = 0;
 var spinResult;
 var tmnt = "";
 var winRatio = 0;
@@ -66,6 +24,8 @@ var splinter = 0;
 var april = 0;
 var pizza = 0;
 var shredder = 0;
+var rocksteady = 0;
+var bebop = 0;
 
 // GAME OBJECTS
 var game;
@@ -76,6 +36,9 @@ var betOneButton;
 var resetButton;
 var powerButton;
 var jackpotTxt;
+var creditsTxt;
+var betTxt;
+var winningsTxt;
 
 // FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 function init() {
@@ -103,6 +66,8 @@ function resetTally() {
     april = 0;
     pizza = 0;
     shredder = 0;
+    rocksteady = 0;
+    bebop = 0;
 }
 
 function resetAll() {
@@ -111,8 +76,6 @@ function resetAll() {
     jackpot = 5000;
     turn = 0;
     playerBet = 0;
-    winNumber = 0;
-    lossNumber = 0;
     winRatio = 0;
 }
 
@@ -132,8 +95,16 @@ function Reels() {
     for (var spin = 0; spin < 3; spin++) {
         outCome[spin] = Math.floor((Math.random() * 65) + 1);
         switch (outCome[spin]) {
-            case checkRange(outCome[spin], 1, 27):
+            case checkRange(outCome[spin], 1, 7):
                 betLine[spin] = "shredder";
+                shredder++;
+                break;
+            case checkRange(outCome[spin], 8, 17):
+                betLine[spin] = "bebop";
+                shredder++;
+                break;
+            case checkRange(outCome[spin], 18, 27):
+                betLine[spin] = "rocksteady";
                 shredder++;
                 break;
             case checkRange(outCome[spin], 28, 37):
@@ -170,7 +141,7 @@ function Reels() {
 }
 
 function determineWinnings() {
-    if (shredder == 0) {
+    if (shredder == 0 && bebop == 0 && rocksteady == 0) {
         if (leo == 3) {
             winnings = playerBet * 10;
         } else if (michel == 3) {
@@ -184,7 +155,7 @@ function determineWinnings() {
         } else if (april == 3) {
             winnings = playerBet * 75;
         } else if (pizza == 3) {
-            winnings = playerBet * 100;
+            winnings = jackpot;
         } else if (leo == 2) {
             winnings = playerBet * 2;
         } else if (michel == 2) {
@@ -204,39 +175,76 @@ function determineWinnings() {
         } else {
             winnings = playerBet * 1;
         }
-        winNumber++;
-        //showWinMessage();
+        playerMoney += winnings;
     } else {
-        lossNumber++;
-        //showLossMessage();
     }
 }
 
 function spinButtonClicked() {
-    spinResult = Reels();
-    tmnt = spinResult[0] + " - " + spinResult[1] + " - " + spinResult[2];
+    if (playerMoney != 0 && playerBet != 0) {
+        playerMoney -= playerBet;
+        spinResult = Reels();
+        determineWinnings();
+        tmnt = spinResult[0] + " - " + spinResult[1] + " - " + spinResult[2];
 
+        for (var slot = 0; slot < slotContainer.length; slot++) {
+            slotContainer[slot].removeAllChildren();
+            icons[slot] = new createjs.Bitmap("assets/images/" + spinResult[slot] + ".png");
+            slotContainer[slot].addChild(icons[slot]);
+        }
+        resetTally();
+        jackpotTxt.text = "$" + jackpot;
+        creditsTxt.text = "$" + playerMoney;
+        betTxt.text = "$" + playerBet;
+        winningsTxt.text = "$" + winnings;
+        winnings = 0;
+    }
+}
+
+function betOneButtonClicked() {
+    playerBet += 1;
+    betTxt.text = "$" + playerBet;
+}
+
+function betMaxButtonClicked() {
+    playerBet = playerMoney;
+    if (playerBet != 0) {
+        playerMoney -= playerBet;
+        spinResult = Reels();
+        determineWinnings();
+        tmnt = spinResult[0] + " - " + spinResult[1] + " - " + spinResult[2];
+
+        for (var slot = 0; slot < slotContainer.length; slot++) {
+            slotContainer[slot].removeAllChildren();
+            icons[slot] = new createjs.Bitmap("assets/images/" + spinResult[slot] + ".png");
+            slotContainer[slot].addChild(icons[slot]);
+        }
+        resetTally();
+        jackpotTxt.text = "$" + jackpot;
+        creditsTxt.text = "$" + playerMoney;
+        betTxt.text = "$" + playerBet;
+        winningsTxt.text = "$" + winnings;
+        winnings = 0;
+    }
+    playerBet = 0;
+}
+
+function resetButtonClicked() {
+    resetAll();
     for (var slot = 0; slot < slotContainer.length; slot++) {
         slotContainer[slot].removeAllChildren();
-        icons[slot] = new createjs.Bitmap("assets/images/" + spinResult[slot] + ".png");
-        slotContainer[slot].addChild(icons[slot]);
     }
     jackpotTxt.text = "$" + jackpot;
-}
-
-function ButtonOut(event) {
-    event.currentTarget.alpha = 1; // 100% Alpha
-}
-
-function ButtonOver(event) {
-    event.currentTarget.alpha = 0.7;
+    creditsTxt.text = "$" + playerMoney;
+    betTxt.text = "$" + playerBet;
+    winningsTxt.text = "$" + winnings;
 }
 
 function createUI() {
     background = new createjs.Bitmap("assets/images/background.png");
     game.addChild(background);
 
-    for (var index = 0; index < 3; index++) {
+    for (var index = 0; index < constants.NUM_SLOT; index++) {
         slotContainer[index] = new createjs.Container();
         game.addChild(slotContainer[index]);
     }
@@ -249,32 +257,53 @@ function createUI() {
     slotContainer[2].y = 132;
 
     // Spin Button
-    spinButton = new Button("assets/images/spinButton.png", 179, 411);
+    spinButton = new objects.Button("assets/images/spinButton.png", 179, 411);
     game.addChild(spinButton.getImage());
 
     // Spin Button Event Listeners
     spinButton.getImage().addEventListener("click", spinButtonClicked);
 
     // Bet Max Button
-    betMaxButton = new Button("assets/images/betMaxButton.png", 442, 509);
+    betMaxButton = new objects.Button("assets/images/betMaxButton.png", 442, 509);
     game.addChild(betMaxButton.getImage());
 
+    betMaxButton.getImage().addEventListener("click", betMaxButtonClicked);
+
     // Bet One Button
-    betOneButton = new Button("assets/images/betOneButton.png", 43, 509);
+    betOneButton = new objects.Button("assets/images/betOneButton.png", 43, 509);
     game.addChild(betOneButton.getImage());
 
+    betOneButton.getImage().addEventListener("click", betOneButtonClicked);
+
     // Reset Button
-    resetButton = new Button("assets/images/resetButton.png", 135, 365);
+    resetButton = new objects.Button("assets/images/resetButton.png", 135, 365);
     game.addChild(resetButton.getImage());
 
+    resetButton.getImage().addEventListener("click", resetButtonClicked);
+
     // Power Button
-    powerButton = new Button("assets/images/powerButton.png", 368, 365);
+    powerButton = new objects.Button("assets/images/powerButton.png", 368, 365);
     game.addChild(powerButton.getImage());
 
     jackpotTxt = new createjs.Text("$" + jackpot, "26px Arial", "#ffffff");
     game.addChild(jackpotTxt);
     jackpotTxt.x = 280;
     jackpotTxt.y = 22;
+
+    creditsTxt = new createjs.Text("$" + playerMoney, "26px Arial", "#ffffff");
+    game.addChild(creditsTxt);
+    creditsTxt.x = 134;
+    creditsTxt.y = 320;
+
+    betTxt = new createjs.Text("$" + playerBet, "26px Arial", "#ffffff");
+    game.addChild(betTxt);
+    betTxt.x = 290;
+    betTxt.y = 320;
+
+    winningsTxt = new createjs.Text("$" + winnings, "26px Arial", "#ffffff");
+    game.addChild(winningsTxt);
+    winningsTxt.x = 215;
+    winningsTxt.y = 376;
 }
 
 function main() {

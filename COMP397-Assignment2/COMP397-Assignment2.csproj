@@ -69,6 +69,7 @@
   <ItemGroup>
     <Content Include="assets\images\april.png" />
     <Content Include="assets\images\background.png" />
+    <Content Include="assets\images\bebop.png" />
     <Content Include="assets\images\betMaxButton.png" />
     <Content Include="assets\images\betOneButton.png" />
     <Content Include="assets\images\doni.png" />
@@ -78,6 +79,7 @@
     <Content Include="assets\images\powerButton.png" />
     <Content Include="assets\images\raph.png" />
     <Content Include="assets\images\resetButton.png" />
+    <Content Include="assets\images\rocksteady.png" />
     <Content Include="assets\images\shredder.png" />
     <Content Include="assets\images\spinButton.png" />
     <Content Include="assets\images\splinter.png" />
@@ -95,12 +97,14 @@
     <Folder Include="css\" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Include="Scripts\constants\constants.ts" />
     <TypeScriptCompile Include="Scripts\game.ts" />
     <TypeScriptCompile Include="Scripts\lib\createjs-lib.d.ts" />
     <TypeScriptCompile Include="Scripts\lib\easeljs.d.ts" />
     <TypeScriptCompile Include="Scripts\lib\preloadjs.d.ts" />
     <TypeScriptCompile Include="Scripts\lib\soundjs.d.ts" />
     <TypeScriptCompile Include="Scripts\lib\tweenjs.d.ts" />
+    <TypeScriptCompile Include="Scripts\objects\button.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
