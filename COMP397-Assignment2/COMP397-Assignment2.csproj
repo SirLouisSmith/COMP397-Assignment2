@@ -67,12 +67,20 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\images\april.png" />
     <Content Include="assets\images\background.png" />
     <Content Include="assets\images\betMaxButton.png" />
     <Content Include="assets\images\betOneButton.png" />
+    <Content Include="assets\images\doni.png" />
+    <Content Include="assets\images\leo.png" />
+    <Content Include="assets\images\michel.png" />
+    <Content Include="assets\images\pizza.png" />
     <Content Include="assets\images\powerButton.png" />
+    <Content Include="assets\images\raph.png" />
     <Content Include="assets\images\resetButton.png" />
+    <Content Include="assets\images\shredder.png" />
     <Content Include="assets\images\spinButton.png" />
+    <Content Include="assets\images\splinter.png" />
     <Content Include="index.html" />
     <Content Include="Scripts\lib\easeljs-0.8.0.min.js" />
     <Content Include="Scripts\lib\preloadjs-0.6.0.min.js" />
