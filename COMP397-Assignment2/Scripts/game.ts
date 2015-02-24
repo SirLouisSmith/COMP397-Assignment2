@@ -1,6 +1,12 @@
 ﻿/// <reference path="objects/button.ts" />
 /// <reference path="constants/constants.ts" />
+
+// Source file name: game.ts
 // Author: Louis Smith
+// Last modified by: Louis Smith
+// Last modified date: 24/02/2015
+// Description: This is the main game code that generates all of the graphics
+//              and contains all of the funtionality
 
 // VARIABLES ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 var canvas; // Reference to the HTML 5 Canvas element
@@ -9,9 +15,9 @@ var icons: createjs.Bitmap[] = [];
 var slotContainer: createjs.Container[] = [];
 
 // GAME VARIABLES
-var playerMoney = 1000;
+var playerMoney = constants.INIT_MONEY;
 var winnings = 0;
-var jackpot = 5000;
+var jackpot = constants.JACKPOT;
 var turn = 0;
 var playerBet = 0;
 var spinResult;
@@ -77,9 +83,9 @@ function resetTally() {
 }
 
 function resetAll() {
-    playerMoney = 1000;
+    playerMoney = constants.INIT_MONEY;
     winnings = 0;
-    jackpot = 5000;
+    jackpot = constants.JACKPOT;
     turn = 0;
     playerBet = 0;
     winRatio = 0;
@@ -99,7 +105,7 @@ function Reels() {
     var betLine = [" ", " ", " "];
     var outCome = [0, 0, 0];
 
-    for (var spin = 0; spin < 3; spin++) {
+    for (var spin = 0; spin < constants.NUM_SLOT; spin++) {
         outCome[spin] = Math.floor((Math.random() * 65) + 1);
         switch (outCome[spin]) {
             case checkRange(outCome[spin], 1, 7):
@@ -267,6 +273,11 @@ function resetButtonClicked() {
     winningsTxt.text = "$" + winnings;
 }
 
+function powerButtonClicked() {
+    window.open('', '_parent', '');
+    window.close();
+}
+
 
 function createUI() {
     background = new createjs.Bitmap("assets/images/background.png");
@@ -312,6 +323,8 @@ function createUI() {
     // Power Button
     powerButton = new objects.Button("assets/images/powerButton.png", 368, 365);
     game.addChild(powerButton.getImage());
+
+    powerButton.getImage().addEventListener("click", powerButtonClicked);
 
     jackpotTxt = new createjs.Text("$" + jackpot, "26px Arial", "#ffffff");
     game.addChild(jackpotTxt);

@@ -1,4 +1,10 @@
-﻿module objects {
+﻿// Source file name: button.ts
+// Author: Louis Smith
+// Last modified by: Louis Smith
+// Last modified date: 24/02/2015
+// Description: This code creates the button objects which includes over and out functions
+
+module objects {
 export    class Button {
         //private variables
         private _image: createjs.Bitmap;
