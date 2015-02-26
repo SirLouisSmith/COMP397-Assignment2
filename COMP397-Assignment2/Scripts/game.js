@@ -1,4 +1,5 @@
-﻿/// <reference path="objects/button.ts" />
+﻿/// <reference path="managers/asset.ts" />
+/// <reference path="objects/button.ts" />
 /// <reference path="constants/constants.ts" />
 // Source file name: game.ts
 // Author: Louis Smith
@@ -44,9 +45,12 @@ var jackpotTxt;
 var creditsTxt;
 var betTxt;
 var winningsTxt;
+var slotMusic;
 
 // FUNCTIONS ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 function init() {
+    managers.Assets.init();
+
     canvas = document.getElementById("canvas");
     stage = new createjs.Stage(canvas); // Parent Object
     stage.enableMouseOver(20); // Turn on Mouse Over events
@@ -182,6 +186,7 @@ function determineWinnings() {
         }
         playerMoney += winnings;
     } else {
+        jackpot += playerBet;
     }
 }
 
@@ -243,6 +248,10 @@ function resetButtonClicked() {
     creditsTxt.text = "$" + playerMoney;
     betTxt.text = "$" + playerBet;
     winningsTxt.text = "$" + winnings;
+
+    //the only way I was able to get the music playing
+    slotMusic.stop();
+    slotMusic = createjs.Sound.play('music', createjs.Sound.INTERRUPT_NONE, 0, 0, -1, 1, 0);
 }
 
 function powerButtonClicked() {
@@ -316,6 +325,9 @@ function createUI() {
     game.addChild(winningsTxt);
     winningsTxt.x = 215;
     winningsTxt.y = 376;
+
+    //this is used to initialise the music
+    slotMusic = createjs.Sound.play('music', createjs.Sound.INTERRUPT_NONE, 0, 0, -1, 0.5, 0);
 }
 
 function main() {

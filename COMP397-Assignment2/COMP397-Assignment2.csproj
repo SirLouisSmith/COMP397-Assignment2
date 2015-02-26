@@ -67,6 +67,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\sounds\background_music.mp3" />
     <Content Include="assets\images\april.png" />
     <Content Include="assets\images\background.png" />
     <Content Include="assets\images\bebop.png" />
@@ -104,6 +105,7 @@
     <TypeScriptCompile Include="Scripts\lib\preloadjs.d.ts" />
     <TypeScriptCompile Include="Scripts\lib\soundjs.d.ts" />
     <TypeScriptCompile Include="Scripts\lib\tweenjs.d.ts" />
+    <TypeScriptCompile Include="Scripts\managers\asset.ts" />
     <TypeScriptCompile Include="Scripts\objects\button.ts" />
   </ItemGroup>
   <PropertyGroup>
