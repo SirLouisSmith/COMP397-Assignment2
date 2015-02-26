@@ -67,6 +67,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\images\betTenButton.png" />
+    <Content Include="assets\images\musicButton.png" />
     <Content Include="assets\sounds\background_music.mp3" />
     <Content Include="assets\images\april.png" />
     <Content Include="assets\images\background.png" />

@@ -5,7 +5,7 @@
 // Source file name: game.ts
 // Author: Louis Smith
 // Last modified by: Louis Smith
-// Last modified date: 24/02/2015
+// Last modified date: 26/02/2015
 // Description: This is the main game code that generates all of the graphics
 //              and contains all of the funtionality
 
@@ -41,9 +41,11 @@ var game: createjs.Container; // Main Game Container Object
 var background: createjs.Bitmap;
 var spinButton: objects.Button;
 var betMaxButton: objects.Button;
-var betOneButton: objects.Button;
+var betTenButton: objects.Button;
 var resetButton: objects.Button;
 var powerButton: objects.Button;
+var musicButton: objects.Button;
+
 var jackpotTxt: createjs.Text;
 var creditsTxt: createjs.Text;
 var betTxt: createjs.Text;
@@ -234,8 +236,8 @@ function spinButtonClicked() {
     }
 }
 
-function betOneButtonClicked() {
-    playerBet += 1;
+function betTenButtonClicked() {
+    playerBet += 10;
     betTxt.text = "$" + playerBet;
 }
 
@@ -273,7 +275,9 @@ function resetButtonClicked() {
     creditsTxt.text = "$" + playerMoney;
     betTxt.text = "$" + playerBet;
     winningsTxt.text = "$" + winnings;
+}
 
+function musicButtonClicked() {
     //the only way I was able to get the music playing
     slotMusic.stop();
     slotMusic = createjs.Sound.play('music', createjs.Sound.INTERRUPT_NONE, 0, 0, -1, 1, 0);
@@ -315,10 +319,10 @@ function createUI() {
     betMaxButton.getImage().addEventListener("click", betMaxButtonClicked);
 
     // Bet One Button
-    betOneButton = new objects.Button("assets/images/betOneButton.png", 43, 509);
-    game.addChild(betOneButton.getImage());
+    betTenButton = new objects.Button("assets/images/betTenButton.png", 43, 509);
+    game.addChild(betTenButton.getImage());
 
-    betOneButton.getImage().addEventListener("click", betOneButtonClicked);
+    betTenButton.getImage().addEventListener("click", betTenButtonClicked);
 
     // Reset Button
     resetButton = new objects.Button("assets/images/resetButton.png", 135, 365);
@@ -331,6 +335,12 @@ function createUI() {
     game.addChild(powerButton.getImage());
 
     powerButton.getImage().addEventListener("click", powerButtonClicked);
+
+    //Music Button
+    musicButton = new objects.Button("assets/images/musicButton.png", 33, 5);
+    game.addChild(musicButton.getImage());
+
+    musicButton.getImage().addEventListener("click", musicButtonClicked);
 
     jackpotTxt = new createjs.Text("$" + jackpot, "26px Arial", "#ffffff");
     game.addChild(jackpotTxt);
