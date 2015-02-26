@@ -177,7 +177,7 @@ function determineWinnings() {
         else if (april == 3) {
             winnings = playerBet * 75;
         }
-        else if (pizza == 3) {
+        else if (pizza == 3) { //3 * 1.5% chance of getting jackpot
             winnings = jackpot;
         }
         else if (leo == 2) {
@@ -215,32 +215,53 @@ function determineWinnings() {
 
 }
 
+//SPIN CLICK FUNCTION
 function spinButtonClicked() {
     if (playerMoney != 0 && playerBet != 0) {
-        playerMoney -= playerBet;
-        spinResult = Reels();
-        determineWinnings();
-        tmnt = spinResult[0] + " - " + spinResult[1] + " - " + spinResult[2];
+        if (playerBet <= playerMoney) {
+            playerMoney -= playerBet;
+            spinResult = Reels();
+            determineWinnings();
+            tmnt = spinResult[0] + " - " + spinResult[1] + " - " + spinResult[2];
 
-        for (var slot = 0; slot < slotContainer.length; slot++) {
-            slotContainer[slot].removeAllChildren();
-            icons[slot] = new createjs.Bitmap("assets/images/" + spinResult[slot] + ".png");
-            slotContainer[slot].addChild(icons[slot]);
+            for (var slot = 0; slot < slotContainer.length; slot++) {
+                slotContainer[slot].removeAllChildren();
+                icons[slot] = new createjs.Bitmap("assets/images/" + spinResult[slot] + ".png");
+                slotContainer[slot].addChild(icons[slot]);
+            }
+            resetTally();
+            jackpotTxt.text = "$" + jackpot;
+            creditsTxt.text = "$" + playerMoney;
+            if (winnings == jackpot) {
+                betTxt.text = "JACKPOT!!";
+                jackpot = 5000;
+            }
+            else {
+                betTxt.text = "$" + playerBet;
+            }
+            winningsTxt.text = "$" + winnings;
+            winnings = 0;
         }
-        resetTally();
-        jackpotTxt.text = "$" + jackpot;
-        creditsTxt.text = "$" + playerMoney;
-        betTxt.text = "$" + playerBet;
-        winningsTxt.text = "$" + winnings;
-        winnings = 0;
+        else {
+            playerBet = 0;
+            betTxt.text = "$" + playerBet;
+            winningsTxt.text = "Can't Bet";
+        }
     }
 }
 
+//BET $10 BUTTON
 function betTenButtonClicked() {
-    playerBet += 10;
-    betTxt.text = "$" + playerBet;
+    if (playerBet >= playerMoney) {
+        winningsTxt.text = "Not Enough";
+    }
+    else {
+        playerBet += 10;
+        betTxt.text = "$" + playerBet;
+        winningsTxt.text = "";
+    }
 }
-
+//BET MAX BUTTON (spins automatically when pressed
 function betMaxButtonClicked() {
     playerBet = playerMoney;
     if (playerBet != 0) {
@@ -264,8 +285,7 @@ function betMaxButtonClicked() {
     playerBet = 0;
 }
 
-
-
+//RESET BUTTON CLICK
 function resetButtonClicked() {
     resetAll();
     for (var slot = 0; slot < slotContainer.length; slot++) {
@@ -277,12 +297,13 @@ function resetButtonClicked() {
     winningsTxt.text = "$" + winnings;
 }
 
+//MUSIC BUTTON CLICK(the only way I was able to get the music playing)
 function musicButtonClicked() {
-    //the only way I was able to get the music playing
     slotMusic.stop();
     slotMusic = createjs.Sound.play('music', createjs.Sound.INTERRUPT_NONE, 0, 0, -1, 1, 0);
 }
 
+//POWER BUTTON CLICK (doesn't work with FireFox)
 function powerButtonClicked() {
     window.open('', '_parent', '');
     window.close();
